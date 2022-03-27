@@ -25,7 +25,26 @@ defmodule Scraper do
     end
   end
 
-  defp extract_location_name_and_id({_tag, attrs, children}) do
+  @doc """
+  It gets soups of a given location while passed an id of that location
+  """
+  def get_soups location_id do
+    case HTTPoison.get "https://www.haleandhearty.com/menu/?location=#{location_id}" do
+      {:ok, response} ->
+        case response.status_code do
+          200 ->
+            soups =
+              response.body
+              |>Floki.find("div.category.soups p.menu-item__name")
+              |>Enum.map(fn({_,_,[soup]}) -> soup end)
+            {:ok, soups}
+          _ -> :error
+        end
+      _ -> :error
+    end
+  end
+
+  defp extract_location_name_and_id {_tag, attrs, children} do
     {_, _, [name]}=
     children
     |> Floki.find(".location-card__name")
