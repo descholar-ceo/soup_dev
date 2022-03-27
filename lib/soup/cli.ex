@@ -39,9 +39,9 @@ defmodule Soup.CLI do
   def process :list_locations do
     Soup.enter_select_location_flow
   end
-  # def process :list_soups do
-  #   Soup.fetch_soup_list
-  # end
+  def process :list_soups do
+    Soup.fetch_soup_list
+  end
   def process :invalid_tag do
     IO.puts "Invalid argument(s) passed. See usage below:"
     process(:help)

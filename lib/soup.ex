@@ -1,4 +1,5 @@
 defmodule Soup do
+  @spec enter_select_location_flow :: :ok
   def enter_select_location_flow do
     IO.puts "Wait a moment while I fetch locations for you"
     locations = Scraper.get_locations
@@ -11,6 +12,8 @@ defmodule Soup do
     end
   end
   @config_file "~/.soup"
+
+  @spec ask_user_to_select_location(any) :: {:ok, maybe_improper_list | map}
   @doc """
   Prompt the user to select a location whose soup list they want to view.
 
@@ -39,6 +42,7 @@ defmodule Soup do
         end
     end
   end
+  @spec display_soup_list(atom | %{:id => any, :name => any, optional(any) => any}) :: :ok
   def display_soup_list location do
     IO.puts "One moment while I fetch today's soup list for #{location.name}..."
     soups = Scraper.get_soups location.id
@@ -48,6 +52,43 @@ defmodule Soup do
         Enum.each(soups, &(IO.puts " -> " <> &1))
       _ ->
         IO.puts "Error fetching soups"
+    end
+  end
+  @spec get_saved_location ::
+          :error
+          | {:empty_location_id}
+          | {:ok, atom | %{:id => binary, optional(any) => any}}
+          | %{:__exception__ => true, :__struct__ => atom, optional(atom) => any}
+  @doc """
+  It get location name saved on ~/.soup file
+  """
+  def get_saved_location do
+    case Path.expand(@config_file) |> File.read() do
+      {:ok, location} ->
+        try do
+          location = :erlang.binary_to_term(location)
+          case String.trim(location.id) do
+            "" -> {:empty_location_id}
+            _ -> {:ok,location}
+          end
+        rescue
+          e in ArgumentError -> e
+        end
+      {:error, _} ->
+        :error
+    end
+  end
+
+  @doc """
+  It fetches soup list
+  """
+  def fetch_soup_list do
+    case get_saved_location() do
+      {:ok, location} ->
+        display_soup_list(location)
+      _ ->
+        IO.puts "You haven't selected a default location, kindly select one below"
+        enter_select_location_flow()
     end
   end
 end
