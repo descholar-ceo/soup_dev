@@ -12,7 +12,7 @@ defmodule Soup.CLI do
       alias: [h: :help]
     )
     case args do
-      {:help, _, _} ->
+      {[help: true], _, _} ->
         :help
 
       {[], [], [{"-h", nil}]} ->
@@ -32,7 +32,7 @@ defmodule Soup.CLI do
   def process :help do
     IO.puts """
     soup --locations  # Select a default location whose soups you want to list
-    soup        # List the soups for a default location (you'll be prompted to select a default location if you haven't already)
+    soup # List the soups for a default location (you'll be prompted to select a default location if you haven't already)
     """
     System.halt 0
   end

@@ -24,3 +24,5 @@ soup_dev-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+soup_dev
