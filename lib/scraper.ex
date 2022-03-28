@@ -25,6 +25,7 @@ defmodule Scraper do
     end
   end
 
+  @spec get_soups(any) :: :error | {:ok, list}
   @doc """
   It gets soups of a given location while passed an id of that location
   """
