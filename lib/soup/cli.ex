@@ -1,4 +1,8 @@
 defmodule Soup.CLI do
+  @spec main(any) :: none
+  @doc """
+  The main function of the CLI.
+  """
   def main argv do
     IO.puts argv
     argv
@@ -6,6 +10,10 @@ defmodule Soup.CLI do
     |>process
   end
 
+  @spec parse_args(any) :: none
+  @doc """
+  Parse the command line arguments.
+  """
   def parse_args argv do
     args = OptionParser.parse(
       argv, strict: [help: :boolean, locations: :boolean],
@@ -29,6 +37,10 @@ defmodule Soup.CLI do
     end
   end
 
+  @spec process(:list_locations | :list_soups) :: :ok
+  @doc """
+  Process the command line arguments.
+  """
   def process :help do
     IO.puts """
     soup --locations  # Select a default location whose soups you want to list

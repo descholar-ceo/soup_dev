@@ -1,7 +1,12 @@
 defmodule Soup do
+  @moduledoc """
+  It contains all of the functions which deal with the CLI logic.
+  """
   @spec enter_select_location_flow :: :ok
   def enter_select_location_flow do
-    IO.puts "Wait a moment while I fetch locations for you"
+    IO.puts "\tWait a moment while I fetch locations for you
+    =======================================================
+    "
     locations = Scraper.get_locations
     case locations do
       {:ok, locations} ->
@@ -36,7 +41,7 @@ defmodule Soup do
             IO.puts "Invalid selection"
             ask_user_to_select_location locations
           location ->
-            IO.puts "You have elected #{location["name"]}"
+            IO.puts "You have elected #{location.name}"
             File.write!(Path.expand(@config_file), to_string(:erlang.term_to_binary(location)))
             {:ok, location}
         end
@@ -79,6 +84,7 @@ defmodule Soup do
     end
   end
 
+  @spec fetch_soup_list :: :ok
   @doc """
   It fetches soup list
   """
