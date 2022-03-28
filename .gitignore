@@ -26,3 +26,5 @@ soup_dev-*.tar
 /tmp/
 
 soup_dev
+.vscode
+.idea
